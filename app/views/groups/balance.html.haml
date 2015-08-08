@@ -1,0 +1,12 @@
+%h1 My Current Balance
+%h3
+  Debts
+  - current_user.owned_expenses.where(group_id: @group.id).each do |expense|
+    - unless current_user.expenses.include? expense
+      %p "I owe #{expense.user.name} an amount of #{expense.cost_cents / expense.owners.count}"
+%h3
+  Loans
+  - current_user.expenses.where(group_id: @group.id).each do |expense|
+    - expense.owners.each do |owner|
+      - unless current_user == owner
+        %p "#{owner.name} owes me an amount of #{expense.cost_cents / expense.owners.count}"
