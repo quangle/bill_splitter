@@ -1,0 +1,4 @@
+%p Hi there,
+%br
+%p There is an invitation to join group #{@group.name} on "Bill Splitter", please click on the link to register and join!
+= link_to "Click to register and join group", group_add_user_url(group_id: @group.id, email: @email)

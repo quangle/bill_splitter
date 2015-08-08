@@ -3,6 +3,7 @@
 
 %h3
   Current group members:
+  = link_to "Invite user to group", edit_group_path(@group)
   - @group.users.each do |user|
     %li
       = "#{user.email} - #{user.name}"

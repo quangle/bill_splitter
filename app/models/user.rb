@@ -2,12 +2,12 @@ class User < ActiveRecord::Base
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :trackable, :validatable
 
-  has_many :users_groups
+  has_many :users_groups, dependent: :destroy
   has_many :groups, through: :users_groups
-  has_many :expenses
-  has_many :users_expenses
+  has_many :expenses, dependent: :destroy
+  has_many :users_expenses, dependent: :destroy
   has_many :owned_expenses, through: :users_expenses, source: :expense
-  has_many :user_expense_share_values
+  has_many :user_expense_share_values, dependent: :destroy
 
   after_create :create_personal_group
 

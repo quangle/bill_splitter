@@ -6,6 +6,7 @@ Rails.application.routes.draw do
       get :balance
       get :detail_balance
     end
+    get :add_user
     resources :expenses, only: [:new, :create]
   end
 

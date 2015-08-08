@@ -1,7 +1,7 @@
 class Expense < ActiveRecord::Base
-  has_many :users_expenses, inverse_of: :expense
+  has_many :users_expenses, inverse_of: :expense, dependent: :destroy
   has_many :owners, through: :users_expenses, source: :user
-  has_many :user_expense_share_values
+  has_many :user_expense_share_values, dependent: :destroy
   belongs_to :user
   belongs_to :group
 

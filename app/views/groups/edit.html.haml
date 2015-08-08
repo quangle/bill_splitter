@@ -1,0 +1,6 @@
+%h1
+  Add User to group
+%br
+  = form_for @group do |f|
+    = text_field_tag "email", "", placeholder: "Enter user's email here"
+    = f.submit "Add"
