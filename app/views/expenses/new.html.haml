@@ -1,0 +1,17 @@
+%h1 Create New Expense
+= form_for [@group, @expense] do |f|
+  = f.hidden_field :group_id, value: @group.id
+  = f.label :description
+  = f.text_field :description
+  %br
+  = f.label :quantity
+  = f.number_field :quantity
+  %br
+  = f.label :cost_cents, "Total cost (in cents)"
+  = f.number_field :cost_cents
+  %br
+  - @group.users.each do |user|
+    = check_box_tag("expense[user_ids][]", user.id)
+    = label_tag "user_id", user.email
+  %br
+  = f.submit "Create"
