@@ -21,7 +21,7 @@ group :development do
 end
 
 group :test do
-  gem 'ffaker'
+  gem 'faker'
   gem 'capybara'
   gem 'shoulda-matchers', '~> 2.7'
   gem 'database_cleaner'
@@ -33,4 +33,3 @@ end
 group :development, :test do
   gem 'byebug'
 end
-
