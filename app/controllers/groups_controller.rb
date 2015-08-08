@@ -10,12 +10,17 @@ class GroupsController < InheritedResources::Base
 
   def update
     user = User.find_by_email(params[:email])
-    if user.present?
+    if user.present? && !user.groups.include?(@group)
       @group.users << user
-      redirect_to action: :show, id: @group.id, notice: "User has been added to the group"
-    else
+      redirect_to action: :show, id: @group.id
+      flash[:notice] = "User has been added to the group"
+    elsif !user.present?
       CommonMailer.send_invitation_email(params[:email], @group).deliver
-      redirect_to action: :show, id: @group.id, notice: "Invitation email has been sent"
+      redirect_to action: :show, id: @group.id
+      flash[:notice] = "Invitation email has been sent"
+    else
+      redirect_to action: :show, id: @group.id
+      flash[:notice] = "User has already been in group"
     end
   end
 

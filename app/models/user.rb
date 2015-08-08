@@ -11,6 +11,8 @@ class User < ActiveRecord::Base
 
   after_create :create_personal_group
 
+  validates :email, uniqueness: true
+
   def name
     "#{first_name.to_s} #{last_name.to_s}"
   end
