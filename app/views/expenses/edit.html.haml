@@ -1,0 +1,36 @@
+%h1 Edit Expense
+= form_for [@group, @expense] do |f|
+  = @expense.errors.full_messages.join(', ')
+  %br
+  = f.hidden_field :group_id, value: @group.id
+  = f.label :description
+  = f.text_field :description
+  %br
+  = f.label :quantity
+  = f.number_field :quantity
+  %br
+  = f.label :cost, "Total cost (in USD)"
+  = f.text_field :cost, data: { autonumeric: { aSign: '$', vMin: '0', aPad: false} }, class: "text-input"
+  %br
+  - @group.users.each_with_index do |user, index|
+    %br
+    = check_box_tag "expense[user_values[#{index}]][user_id]", user.id, "#{@expense.owners.include?(user) ? true : false}".to_b
+    = text_field_tag "expense[user_values[#{index}]][user_value]", @expense.user_expense_share_values.find_by_user_id(user.id).try(:share_value), data: { autonumeric: { aSign: '$', vMin: '0', aPad: false} }, class: "text-input #{@expense.split_method == 'equally' ? 'hidden' : ''} share-value-input"
+    = label_tag "user_id", user.email
+  %br
+  = f.label :split_method
+  = f.select :split_method, ['equally', 'manually']
+  = f.submit "Update"
+
+:javascript
+  $(document).ready(function(){
+    $(".text-input").autoNumeric('init')
+    $("#expense_split_method").on('change', function() {
+      if ($("#expense_split_method").val() == "manually") {
+        $('.share-value-input').removeClass('hidden')
+      }
+      else {
+        $('.share-value-input').addClass('hidden')
+      }
+    })
+  });

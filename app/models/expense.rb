@@ -42,6 +42,12 @@ class Expense < ActiveRecord::Base
     end
   end
 
+  def delete_all_share
+    owners.each do |owner|
+      owner.user_expense_share_values.where(expense_id: self.id).destroy_all
+    end
+  end
+
   private
   def save_equal_share
     if split_method == 'equally'

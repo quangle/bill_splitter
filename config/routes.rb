@@ -7,7 +7,7 @@ Rails.application.routes.draw do
       get :detail_balance
     end
     get :add_user
-    resources :expenses, only: [:new, :create]
+    resources :expenses, only: [:new, :create, :edit, :update]
   end
 
   resources :settle_debts, only: [:new, :index]

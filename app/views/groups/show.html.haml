@@ -16,6 +16,8 @@
       %th Quantity
       %th Cost
       %th Owners
+      %th Status
+      %th Action
     - @group.expenses.where(status: @expense_status).each do |expense|
       %tr
         %td= expense.user.name.titleize
@@ -23,6 +25,8 @@
         %td= expense.quantity
         %td= expense.cost.format
         %td= expense.owners.map(&:name).map(&:titleize).join(', ')
+        %td= "#{expense.status == 'resolved' ? 'resolved' : ''}"
+        %td= link_to "Edit", edit_group_expense_path(@group, expense)
 = link_to "Back to user info", user_path(current_user)
 - if @expense_status.include? 'resolved'
   = link_to "View current expense list", group_path(@group)

@@ -1,5 +1,3 @@
-require 'wannabe_bool'
-
 class GroupsController < InheritedResources::Base
   custom_actions resource: :balance
   before_filter :set_group
@@ -39,7 +37,7 @@ class GroupsController < InheritedResources::Base
   end
 
   def show
-    if params[:history].present? && params[:history].to_b
+    if params[:history].to_b
       @expense_status = ['resolved', 'unresolved']
     else
       @expense_status = ['unresolved']
