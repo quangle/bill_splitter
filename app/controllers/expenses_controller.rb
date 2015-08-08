@@ -7,8 +7,15 @@ class ExpensesController < ApplicationController
 
   def create
     @expense = current_user.expenses.new(permitted_params)
-    permitted_params[:user_ids].each do |user_id|
-      @expense.users_expenses.new(user_id: user_id)
+    params[:expense][:user_values].each do |user_value|
+      user_id = user_value.last[:user_id]
+      share_value = user_value.last[:user_value]
+      if user_id.present?
+        @expense.users_expenses.new(user_id: user_id)
+        if permitted_params[:split_method] == "manually"
+          @expense.user_expense_share_values.new(share_value: share_value, user_id: user_id)
+        end
+      end
     end
     if @expense.save
       redirect_to group_path(@group), notice: "Expense created successfully"
@@ -23,6 +30,6 @@ class ExpensesController < ApplicationController
   end
 
   def permitted_params
-    params.require(:expense).permit(:group_id, :description, :cost_cents, :quantity, user_ids: [])
+    params.require(:expense).permit(:group_id, :description, :cost, :quantity, :split_method, :user_values)
   end
 end

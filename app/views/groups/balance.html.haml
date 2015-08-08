@@ -1,12 +1,12 @@
 %h1 My Current Balance
-%h3
+= link_to "View detail balance history", detail_balance_group_path(@group)
+= link_to "Back to group", group_path(@group)
+%br
+%h2
   Debts
-  - current_user.owned_expenses.where(group_id: @group.id).each do |expense|
-    - unless current_user.expenses.include? expense
-      %p "I owe #{expense.user.name} an amount of #{expense.cost_cents / expense.owners.count}"
-%h3
+  - @group.users.where.not(id: current_user.id).each do |user|
+    %p You owe #{user.name.titleize} an amount of #{number_to_currency(current_user.current_debt_for(@group, user))}
+%h2
   Loans
-  - current_user.expenses.where(group_id: @group.id).each do |expense|
-    - expense.owners.each do |owner|
-      - unless current_user == owner
-        %p "#{owner.name} owes me an amount of #{expense.cost_cents / expense.owners.count}"
+  - @group.users.where.not(id: current_user.id).each do |user|
+    %p #{user.name.titleize} owes you an amount of #{number_to_currency(current_user.current_loan_for(@group, user))}

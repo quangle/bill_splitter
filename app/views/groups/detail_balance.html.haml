@@ -1,0 +1,14 @@
+%h1 My Detail Balance
+= link_to "View current balance", balance_group_path(@group)
+%br
+%h2
+  Debts
+  - current_user.owned_expenses.where(group_id: @group.id).each do |expense|
+    - unless current_user.expenses.include? expense
+      %p You owe #{expense.user.name.titleize} an amount of #{number_to_currency(expense.share_for(current_user))}, from the expense "#{expense.description}" on #{expense.created_at.strftime("%m-%d-%Y")}
+%h2
+  Loans
+  - current_user.expenses.where(group_id: @group.id).each do |expense|
+    - expense.owners.each do |owner|
+      - unless current_user == owner
+        %p #{owner.name.titleize} owes you an amount of #{number_to_currency(expense.share_for(owner))}, from the expense "#{expense.description}" on #{expense.created_at.strftime("%m-%d-%Y")}

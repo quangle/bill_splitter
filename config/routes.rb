@@ -4,6 +4,7 @@ Rails.application.routes.draw do
   resources :groups do
     member do
       get :balance
+      get :detail_balance
     end
     resources :expenses, only: [:new, :create]
   end
