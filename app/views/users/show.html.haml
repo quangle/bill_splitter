@@ -12,9 +12,9 @@
 %p
   %b Your Group List:
   - @user.groups.each do |group|
-    %li 
+    %li
       = link_to group.name, group_path(group)
-
+    %br
 
 = link_to 'Edit', edit_user_path(@user)
 \|

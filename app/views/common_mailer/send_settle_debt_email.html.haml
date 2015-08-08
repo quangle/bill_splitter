@@ -1,0 +1,4 @@
+%p Congratulations
+
+%p= "Please click this link to confirm that you have received payment from #{@current_user.name}"
+%p= link_to "Confirm", settle_debts_url(current_user_id: @current_user.id, group_id: @group.id, user_id: @user.id)

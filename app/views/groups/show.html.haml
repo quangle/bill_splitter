@@ -6,6 +6,8 @@
   - @group.users.each do |user|
     %li
       = "#{user.email} - #{user.name}"
+= link_to "Add your expense", new_group_expense_path(@group)
+%br
   %table
     %tr
       %th Creator
@@ -20,7 +22,5 @@
         %td= expense.quantity
         %td= expense.cost.format
         %td= expense.owners.map(&:name).join(', ')
-
-= link_to "Your balance info in this group", balance_group_path(@group)
-= link_to "Add your expense", new_group_expense_path(@group)
 = link_to "Back to user info", user_path(current_user)
+= link_to "Your balance info in this group", balance_group_path(@group)

@@ -1,11 +1,15 @@
 %h1 My Current Balance
-= link_to "View detail balance history", detail_balance_group_path(@group)
 = link_to "Back to group", group_path(@group)
+= link_to "View detail balance history", detail_balance_group_path(@group)
 %br
 %h2
   Debts
   - @group.users.where.not(id: current_user.id).each do |user|
-    %p You owe #{user.name.titleize} an amount of #{number_to_currency(current_user.current_debt_for(@group, user))}
+    - debt = current_user.current_debt_for(@group, user)
+    %p
+      = "You owe #{user.name.titleize} an amount of #{number_to_currency(debt)}"
+      - if debt > 0
+        = link_to "Settle this debt with #{user.name.titleize}", new_settle_debt_path(group_id: @group.id, user_id: user.id)
 %h2
   Loans
   - @group.users.where.not(id: current_user.id).each do |user|

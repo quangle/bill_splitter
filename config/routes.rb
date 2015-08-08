@@ -9,6 +9,8 @@ Rails.application.routes.draw do
     resources :expenses, only: [:new, :create]
   end
 
+  resources :settle_debts, only: [:new, :index]
+
 
   devise_scope :user do
     root to: "devise/sessions#new"

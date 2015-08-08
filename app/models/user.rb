@@ -18,7 +18,7 @@ class User < ActiveRecord::Base
   def current_debt_for(group, user)
     total_debt = 0
     if group.users.include?(user) && user != self
-      owned_expenses.where(group: group, user: user, status: 'active').each do |expense|
+      owned_expenses.where(group: group, user: user, status: 'unresolved').each do |expense|
         unless expenses.include? expense
           total_debt += expense.share_for(self)
         end
@@ -30,11 +30,16 @@ class User < ActiveRecord::Base
   def current_loan_for(group, user)
     total_loan = 0
     if group.users.include?(user) && user != self
-      expenses.where(group: group, status: 'active').each do |expense|
+      expenses.where(group: group, status: 'unresolved').each do |expense|
         total_loan += expense.share_for(user)
       end
     end
     total_loan
+  end
+
+  def confirm_debts_paid_with(group, user)
+    user_expenses = UserExpenseShareValue.joins(:expense).where("user_expense_share_values.user_id = ? AND expenses.group_id = ? AND expenses.user_id = ?", user.id, group.id, self.id)
+    user_expenses.each { |ue| ue.update_column(:status, 'resolved') }
   end
 
   private

@@ -14,23 +14,23 @@ class Expense < ActiveRecord::Base
 
   accepts_nested_attributes_for :users_expenses
 
-  def equal_share
-    (cost_cents / owners.count) / 100.00
-  end
+  after_create :save_equal_share
 
-  def unequal_share_for(user)
-    (user_expense_share_values.where(user: user).first.share_value_cents) / 100.00
-  end
-
-  def share_for(user)
+  def share_for(user, view_settled = false)
+    view_settled ? status = ['resolved', 'unresolved'] : status = 'unresolved'
     if owners.include?(user)
-      if split_method == 'equally'
-        equal_share
-      elsif split_method == 'manually'
-        unequal_share_for(user)
-      end
+      (user_expense_share_values.where(user: user, status: status).first.try(:share_value_cents).to_i) / 100.00
     else
       0
+    end
+  end
+
+  def resolved(user)
+    share = user_expense_share_values.find_by_user_id(user.id)
+    if share.present?
+      share.status == 'resolved'
+    else
+      false
     end
   end
 
@@ -38,6 +38,16 @@ class Expense < ActiveRecord::Base
     if split_method == "manually"
       if user_expense_share_values.map(&:share_value_cents).sum != cost_cents
         errors.add(:base, "Please make sure total share amount adds up to total cost")
+      end
+    end
+  end
+
+  private
+  def save_equal_share
+    if split_method == 'equally'
+      share_value = cost_cents / owners.count
+      owners.each do |owner|
+        owner.user_expense_share_values.create(share_value_cents: share_value, expense_id: self.id)
       end
     end
   end
