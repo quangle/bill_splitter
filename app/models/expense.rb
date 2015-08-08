@@ -14,7 +14,7 @@ class Expense < ActiveRecord::Base
 
   accepts_nested_attributes_for :users_expenses
 
-  after_create :save_equal_share
+  after_create :save_equal_share, :mark_self_expense_value_as_resolved
 
   def share_for(user, view_settled = false)
     view_settled ? status = ['resolved', 'unresolved'] : status = 'unresolved'
@@ -50,5 +50,9 @@ class Expense < ActiveRecord::Base
         owner.user_expense_share_values.create(share_value_cents: share_value, expense_id: self.id)
       end
     end
+  end
+
+  def mark_self_expense_value_as_resolved
+    user_expense_share_values.where(user: self.user).each { |ue| ue.update_column(:status, 'resolved') }
   end
 end

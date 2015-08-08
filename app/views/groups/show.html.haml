@@ -16,12 +16,16 @@
       %th Quantity
       %th Cost
       %th Owners
-    - @group.expenses.each do |expense|
+    - @group.expenses.where(status: @expense_status).each do |expense|
       %tr
-        %td= expense.user.email
+        %td= expense.user.name.titleize
         %td= expense.description
         %td= expense.quantity
         %td= expense.cost.format
-        %td= expense.owners.map(&:name).join(', ')
+        %td= expense.owners.map(&:name).map(&:titleize).join(', ')
 = link_to "Back to user info", user_path(current_user)
+- if @expense_status.include? 'resolved'
+  = link_to "View current expense list", group_path(@group)
+- else
+  = link_to "View all expense history", group_path(@group, history: true)
 = link_to "Your balance info in this group", balance_group_path(@group)

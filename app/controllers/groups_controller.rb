@@ -1,3 +1,5 @@
+require 'wannabe_bool'
+
 class GroupsController < InheritedResources::Base
   custom_actions resource: :balance
   before_filter :set_group
@@ -34,6 +36,15 @@ class GroupsController < InheritedResources::Base
       group.users << user
       redirect_to new_user_session_url, notice: "Default password is \"password\""
     end
+  end
+
+  def show
+    if params[:history].present? && params[:history].to_b
+      @expense_status = ['resolved', 'unresolved']
+    else
+      @expense_status = ['unresolved']
+    end
+    super
   end
 
   protected

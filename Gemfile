@@ -14,6 +14,7 @@ gem 'bootstrap-sass', '~> 3.3.5'
 gem 'sass-rails', '>= 3.2'
 gem 'inherited_resources'
 gem 'money-rails'
+gem 'wannabe_bool'
 
 group :development do
   gem 'letter_opener'

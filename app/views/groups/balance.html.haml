@@ -6,11 +6,13 @@
   Debts
   - @group.users.where.not(id: current_user.id).each do |user|
     - debt = current_user.current_debt_for(@group, user)
-    %p
-      = "You owe #{user.name.titleize} an amount of #{number_to_currency(debt)}"
-      - if debt > 0
+    - if debt > 0
+      %p
+        = "You owe #{user.name.titleize} an amount of #{number_to_currency(debt)}"
         = link_to "Settle this debt with #{user.name.titleize}", new_settle_debt_path(group_id: @group.id, user_id: user.id)
 %h2
   Loans
   - @group.users.where.not(id: current_user.id).each do |user|
-    %p #{user.name.titleize} owes you an amount of #{number_to_currency(current_user.current_loan_for(@group, user))}
+    - loan = current_user.current_loan_for(@group, user)
+    - if loan > 0
+      %p #{user.name.titleize} owes you an amount of #{number_to_currency(current_user.current_loan_for(@group, user))}
