@@ -9,7 +9,15 @@
 %p
   %b Email:
   = @user.email
+%p
+  %b Your Group List:
+  - @user.groups.each do |group|
+    %li 
+      = link_to group.name, group_path(group)
+
 
 = link_to 'Edit', edit_user_path(@user)
 \|
 = link_to 'Back', users_path
+\|
+= link_to 'Sign Out', destroy_user_session_path, method: :delete

@@ -107,12 +107,20 @@ GEM
       haml (>= 4.0.6, < 5.0)
       html2haml (>= 1.0.1)
       railties (>= 4.0.1)
+    has_scope (0.6.0)
+      actionpack (>= 3.2, < 5)
+      activesupport (>= 3.2, < 5)
     html2haml (2.0.0)
       erubis (~> 2.7.0)
       haml (~> 4.0.0)
       nokogiri (~> 1.6.0)
       ruby_parser (~> 3.5)
     i18n (0.7.0)
+    inherited_resources (1.6.0)
+      actionpack (>= 3.2, < 5)
+      has_scope (~> 0.6.0.rc)
+      railties (>= 3.2, < 5)
+      responders
     jbuilder (2.3.1)
       activesupport (>= 3.0.0, < 5)
       multi_json (~> 1.2)
@@ -132,6 +140,15 @@ GEM
     mime-types (2.6.1)
     mini_portile (0.6.2)
     minitest (5.8.0)
+    monetize (1.1.0)
+      money (~> 6.5.0)
+    money (6.5.1)
+      i18n (>= 0.6.4, <= 0.7.0)
+    money-rails (1.4.1)
+      activesupport (>= 3.0)
+      monetize (~> 1.1.0)
+      money (~> 6.5.0)
+      railties (>= 3.0)
     multi_json (1.11.2)
     multi_test (0.1.2)
     nokogiri (1.6.6.2)
@@ -246,9 +263,11 @@ DEPENDENCIES
   faker
   haml-rails
   html2haml
+  inherited_resources
   jbuilder (~> 2.0)
   jquery-rails
   letter_opener
+  money-rails
   pg
   rails (= 4.2.3)
   rspec-rails
