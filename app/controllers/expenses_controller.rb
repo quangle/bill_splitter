@@ -19,7 +19,7 @@ class ExpensesController < ApplicationController
   def update
     @expense = Expense.find_by_id(params[:id])
     if @expense.present?
-      @expense.delete_all_share
+      @expense.delete_all_shares
       params[:expense][:user_values].each do |user_value|
         user_id = user_value.last[:user_id]
         share_value = user_value.last[:user_value]

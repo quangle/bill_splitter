@@ -8,8 +8,10 @@ class UserExpenseShareValue < ActiveRecord::Base
 
   private
   def settle_expense
-    unless expense.user_expense_share_values.map(&:status).include? 'unresolved'
-      expense.update_column(:status, 'resolved')
+    if expense.present?
+      unless expense.user_expense_share_values.map(&:status).include? 'unresolved'
+        expense.update_column(:status, 'resolved')
+      end
     end
   end
 end

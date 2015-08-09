@@ -5,7 +5,7 @@
   Debts
   - current_user.owned_expenses.where(group_id: @group.id).each do |expense|
     - unless current_user.expenses.include? expense
-      %p You owe #{expense.user.name.titleize} an amount of #{number_to_currency(expense.share_for(current_user, true))}, from the expense "#{expense.description}" on #{expense.created_at.strftime("%m-%d-%Y")} #{expense.resolved(current_user) ? "(Resolved)" : ""}
+      %p You owe #{expense.user.name.titleize} an amount of #{number_to_currency(expense.share_for(current_user, true))}, from the expense "#{expense.description}" on #{expense.created_at.strftime("%m-%d-%Y")} #{expense.resolved?(current_user) ? "(Resolved)" : ""}
 %h2
   Loans
   - current_user.expenses.where(group_id: @group.id).each do |expense|

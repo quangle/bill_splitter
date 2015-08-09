@@ -14,7 +14,7 @@ class Expense < ActiveRecord::Base
 
   accepts_nested_attributes_for :users_expenses
 
-  after_create :save_equal_share, :mark_self_expense_value_as_resolved
+  after_create :save_equal_shares, :mark_self_expense_value_as_resolved
 
   def share_for(user, view_settled = false)
     view_settled ? status = ['resolved', 'unresolved'] : status = 'unresolved'
@@ -25,7 +25,7 @@ class Expense < ActiveRecord::Base
     end
   end
 
-  def resolved(user)
+  def resolved?(user)
     share = user_expense_share_values.find_by_user_id(user.id)
     if share.present?
       share.status == 'resolved'
@@ -42,14 +42,14 @@ class Expense < ActiveRecord::Base
     end
   end
 
-  def delete_all_share
+  def delete_all_shares
     owners.each do |owner|
       owner.user_expense_share_values.where(expense_id: self.id).destroy_all
     end
   end
 
   private
-  def save_equal_share
+  def save_equal_shares
     if split_method == 'equally'
       share_value = cost_cents / owners.count
       owners.each do |owner|
